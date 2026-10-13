@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-cog me-2"></i> System Settings</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm bg-white p-4 mb-4">
+            <h4 class="mb-3">Platform Preferences</h4>
+            <form>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="emailNotif" checked>
+                    <label class="form-check-label" for="emailNotif">Enable Email Notifications for New Maintenance Requests</label>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="autoAssign" checked>
+                    <label class="form-check-label" for="autoAssign">Allow Automatic System Logs for Status Changes</label>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Default Request Priority Level</label>
+                    <select class="form-select">
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="alert('Settings saved successfully!');"><i class="fas fa-save me-1"></i> Save Preferences</button>
+            </form>
+        </div>
+
+        <div class="card shadow-sm bg-white p-4">
+            <h4 class="mb-3">System Information</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span class="text-muted">Application Name</span>
+                    <span class="fw-bold">CampusFix</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span class="text-muted">Version</span>
+                    <span class="fw-bold">1.0.0</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span class="text-muted">Database Framework</span>
+                    <span class="fw-bold">MySQL via SQLAlchemy</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

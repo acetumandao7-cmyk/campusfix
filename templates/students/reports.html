@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-list-alt me-2"></i> My Submitted Reports</h1>
+    <a href="{{ url_for('report_issue') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus-circle me-1"></i> New Request</a>
+</div>
+
+<div class="card shadow-sm bg-white p-3">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in reports %}
+                <tr>
+                    <td>#{{ r.id }}</td>
+                    <td class="fw-bold">{{ r.title }}</td>
+                    <td><i class="fas fa-map-marker-alt me-1 text-muted"></i> {{ r.location }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if r.priority == 'Urgent' %}bg-danger
+                            {% elif r.priority == 'High' %}bg-warning text-dark
+                            {% elif r.priority == 'Medium' %}bg-info text-dark
+                            {% else %}bg-secondary{% endif %}">
+                            {{ r.priority }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge 
+                            {% if r.status == 'Resolved' %}bg-success
+                            {% elif r.status == 'In Progress' %}bg-primary
+                            {% elif r.status == 'Assigned' %}bg-warning text-dark
+                            {% else %}bg-secondary{% endif %}">
+                            {{ r.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('report_details', id=r.id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye me-1"></i> View Details
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">You have not submitted any reports yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2"><i class="fas fa-plus-circle me-2"></i> Report a Maintenance Issue</h1>
+    <a href="{{ url_for('my_reports') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left me-1"></i> Back to Reports</a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow-sm bg-white p-4">
+            <form action="{{ url_for('report_issue') }}" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Issue Title</label>
+                    <input type="text" name="title" class="form-control" required placeholder="e.g., Projector Malfunction in Faculty Room">
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted">Location / Building</label>
+                        <input type="text" name="location" class="form-control" required placeholder="e.g., Faculty Office, Main Building">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label small text-muted">Priority Level</label>
+                        <select name="priority" class="form-select" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Urgent">Urgent</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Description</label>
+                    <textarea name="description" class="form-control" rows="4" required placeholder="Provide detailed information regarding the issue..."></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small text-muted">Upload Photo Proof (Optional)</label>
+                    <input type="file" name="photo" class="form-control" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary px-4"><i class="fas fa-paper-plane me-1"></i> Submit Report</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

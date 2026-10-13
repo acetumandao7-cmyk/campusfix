@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="mb-3">
+    <a href="{{ url_for('my_reports') }}" class="text-decoration-none text-muted small"><i class="fas fa-arrow-left me-1"></i> Back to Assigned Tasks</a>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1">{{ report.title }}</h3>
+        <small class="text-muted">#CF-{{ report.id }} &bull; Location: {{ report.location }} &bull; Priority: {{ report.priority }}</small>
+    </div>
+    <span class="badge 
+        {% if report.status == 'Resolved' %}bg-success
+        {% elif report.status == 'In Progress' %}bg-primary
+        {% elif report.status == 'Assigned' %}bg-warning text-dark
+        {% else %}bg-secondary{% endif %} px-3 py-2 fs-6">
+        {{ report.status }}
+    </span>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-3">Description</h5>
+            <p class="text-muted">{{ report.description }}</p>
+            
+            <h5 class="fw-bold mb-3 mt-4">Attached Photo Proof</h5>
+            <div class="d-flex gap-2">
+                {% if report.photo %}
+                <a href="{{ url_for('static', filename='uploads/' + report.photo) }}" target="_blank">
+                    <img src="{{ url_for('static', filename='uploads/' + report.photo) }}" alt="Issue Photo Proof" class="img-thumbnail rounded" style="width: 150px; height: 150px; object-fit: cover;">
+                </a>
+                {% else %}
+                <div class="bg-light border rounded p-3 text-center d-flex align-items-center justify-content-center text-muted small" style="width: 120px; height: 120px;">
+                    <span>No photo attached</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm p-4 mb-4">
+            <h5 class="fw-bold mb-3">Update Task Status & Resolution</h5>
+            <form action="{{ url_for('update_request', id=report.id) }}" method="POST">
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Resolution Notes / Action Taken</label>
+                    <textarea name="resolution_notes" class="form-control" rows="4" required placeholder="Describe the maintenance action taken...">{{ report.resolution_notes or '' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-success btn-sm px-4"><i class="fas fa-check-circle me-1"></i> Mark as Resolved</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm p-4">
+            <h5 class="fw-bold mb-3">Tracking Progress</h5>
+            <ul class="list-unstyled timeline border-start ps-3 ms-2" style="border-color: #dee2e6 !important;">
+                {% if report.status == 'Resolved' %}
+                <li class="mb-4 position-relative">
+                    <span class="position-absolute translate-middle-y bg-success rounded-circle" style="width: 10px; height: 10px; left: -19px; top: 5px;"></span>
+                    <small class="text-muted">Completed & Verified</small>
+                    <p class="fw-bold mb-0">Maintenance task resolved</p>
+                </li>
+                {% endif %}
+                {% if report.assigned_to %}
+                <li class="mb-4 position-relative">
+                    <span class="position-absolute translate-middle-y bg-primary rounded-circle" style="width: 10px; height: 10px; left: -19px; top: 5px;"></span>
+                    <small class="text-muted">Staff Assigned</small>
+                    <p class="fw-bold mb-0">Assigned to {{ report.assigned_to }}</p>
+                </li>
+                {% endif %}
+                <li class="position-relative">
+                    <span class="position-absolute translate-middle-y bg-secondary rounded-circle" style="width: 10px; height: 10px; left: -19px; top: 5px;"></span>
+                    <small class="text-muted">Initial Stage</small>
+                    <p class="fw-bold mb-0">Report Submitted</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

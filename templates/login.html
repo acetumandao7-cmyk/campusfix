@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block login_content %}
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center position-relative px-4" style="background: url('{{ url_for('static', filename='bg.jpg') }}') no-repeat center center fixed; background-size: cover;">
+    
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-25"></div>
+
+    <div class="row w-100 justify-content-between align-items-center position-relative" style="max-width: 1200px; z-index: 2;">
+        
+        <div class="col-lg-7 d-none d-lg-block text-dark p-4">
+            <div class="mb-5">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fas fa-university text-primary display-3 me-3"></i>
+                    <h1 class="fw-bold mb-0 text-dark display-3" style="font-size: 3.5rem;">CampusFix</h1>
+                </div>
+                <p class="text-muted text-uppercase fw-bold fs-4 mb-0" style="letter-spacing: 2px;">Report. Track. Fix.</p>
+            </div>
+            
+            <div class="mt-4">
+                <h2 class="fw-bold fs-2 text-dark lh-sm mb-3">A Cleaner Campus.<br>A Brighter Tomorrow.</h2>
+                <p class="text-secondary fs-5">Your voice makes a better campus.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-8 mx-auto">
+            <div class="card border-0 shadow-lg p-4 rounded-4 bg-white bg-opacity-90">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold mb-1">Welcome Back!</h3>
+                    <p class="text-muted small">Sign in to your CampusFix account</p>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} py-2 small">{{ message }}</div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <form method="POST">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-envelope"></i></span>
+                            <input type="email" name="email" class="form-control bg-light border-start-0 ps-0 shadow-none" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-lock"></i></span>
+                            <input type="password" name="password" class="form-control bg-light border-start-0 ps-0 shadow-none" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4 small">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="remember">
+                            <label class="form-check-label text-muted" for="remember">Remember Me?</label>
+                        </div>
+                        <a href="#" class="text-decoration-none text-primary">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3 fw-semibold shadow-sm">Log In</button>
+                </form>
+
+                <div class="text-center text-muted small position-relative my-2">
+                    <hr class="text-muted opacity-25">
+                    <span class="position-absolute top-50 start-50 translate-middle bg-white px-2" style="font-size: 12px;">or</span>
+                </div>
+
+                <a href="#" class="btn btn-outline-secondary w-100 py-2 mb-3 d-flex align-items-center justify-content-center bg-white shadow-sm text-dark" style="font-size: 14px;">
+                    <i class="fab fa-google me-2 text-danger"></i> Continue with Google
+                </a>
+
+                <div class="text-center small text-muted">
+                    Don't have an account? <a href="{{ url_for('register') }}" class="text-decoration-none fw-semibold">Create an account</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
