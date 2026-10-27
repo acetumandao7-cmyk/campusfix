@@ -2,3 +2,6 @@ Flask==3.0.2
 PyMySQL==1.1.0
 Werkzeug==3.0.1
 gunicorn
+Flask-SQLAlchemygit add requirements.txt
+git commit -m "Add Flask-SQLAlchemy to requirements"
+git push origin main
