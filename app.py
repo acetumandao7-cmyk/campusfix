@@ -7,7 +7,7 @@ from models import db, User, ServiceRequest
 app = Flask(__name__)
 app.secret_key = 'campusfix_secret_key'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/campusfix_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///campusfix.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 UPLOAD_FOLDER = 'static/uploads'
