@@ -43,7 +43,7 @@
             <form action="{{ url_for('update_request', id=report.id) }}" method="POST">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label class="form-label small text-muted">Assign Maintenance Staff</label>
+                        <label class="form-label small text-muted">Assign Staff</label>
                         <select name="assigned_to" class="form-select">
                             <option value="">-- Unassigned --</option>
                             {% for staff in staff_members %}

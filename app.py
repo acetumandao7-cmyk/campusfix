@@ -24,7 +24,7 @@ def inject_notifications():
         
         if role == 'Administrator':
             count = ServiceRequest.query.filter(ServiceRequest.status != 'Resolved').count()
-        elif role == 'Maintenance Staff':
+        elif role == 'Staff':
             count = ServiceRequest.query.filter_by(assigned_to=user_name).filter(ServiceRequest.status != 'Resolved').count()
         else:
             count = ServiceRequest.query.filter_by(user_id=user_id).filter(ServiceRequest.status != 'Resolved').count()
@@ -111,20 +111,13 @@ def dashboard():
         total_requests = ServiceRequest.query.count()
         users = User.query.all()
         return render_template('admin/dashboard.html', total_users=total_users, total_requests=total_requests, users=users)
-    elif role == 'Maintenance Staff':
+    elif role == 'Staff':
         total = ServiceRequest.query.filter_by(assigned_to=user_name).count()
         pending = ServiceRequest.query.filter_by(assigned_to=user_name, status='Assigned').count()
         in_progress = ServiceRequest.query.filter_by(assigned_to=user_name, status='In Progress').count()
         resolved = ServiceRequest.query.filter_by(assigned_to=user_name, status='Resolved').count()
         recent_reports = ServiceRequest.query.filter_by(assigned_to=user_name).order_by(ServiceRequest.created_at.desc()).limit(5).all()
         return render_template('staff/dashboard.html', total=total, pending=pending, in_progress=in_progress, resolved=resolved, recent_reports=recent_reports)
-    elif role == 'Professor':
-        total = ServiceRequest.query.filter_by(user_id=user_id).count()
-        pending = ServiceRequest.query.filter_by(user_id=user_id, status='Submitted').count()
-        in_progress = ServiceRequest.query.filter_by(user_id=user_id, status='In Progress').count()
-        resolved = ServiceRequest.query.filter_by(user_id=user_id, status='Resolved').count()
-        recent_reports = ServiceRequest.query.filter_by(user_id=user_id).order_by(ServiceRequest.created_at.desc()).limit(5).all()
-        return render_template('professors/dashboard.html', total=total, pending=pending, in_progress=in_progress, resolved=resolved, recent_reports=recent_reports)
     else: 
         total = ServiceRequest.query.filter_by(user_id=user_id).count()
         pending = ServiceRequest.query.filter_by(user_id=user_id, status='Submitted').count()
@@ -145,10 +138,8 @@ def my_reports():
     
     if role == 'Administrator':
         query = ServiceRequest.query
-    elif role == 'Maintenance Staff':
+    elif role == 'Staff':
         query = ServiceRequest.query.filter_by(assigned_to=user_name)
-    elif role == 'Professor':
-        query = ServiceRequest.query.filter_by(user_id=user_id)
     else: 
         query = ServiceRequest.query.filter_by(user_id=user_id)
         
@@ -164,12 +155,10 @@ def my_reports():
     reports = query.order_by(ServiceRequest.created_at.desc()).all()
     
     if role == 'Administrator':
-        staff_members = User.query.filter_by(role='Maintenance Staff').all()
+        staff_members = User.query.filter_by(role='Staff').all()
         return render_template('admin/reports.html', reports=reports, staff_members=staff_members)
-    elif role == 'Maintenance Staff':
+    elif role == 'Staff':
         return render_template('staff/reports.html', reports=reports)
-    elif role == 'Professor':
-        return render_template('professors/reports.html', reports=reports)
     else: 
         return render_template('students/reports.html', reports=reports)
 
@@ -179,7 +168,7 @@ def report_issue():
         return redirect(url_for('login'))
         
     role = session.get('role')
-    if role not in ['Student', 'Professor']:
+    if role not in ['Student', 'Staff']:
         flash('Unauthorized action.', 'danger')
         return redirect(url_for('dashboard'))
         
@@ -212,7 +201,7 @@ def report_issue():
         flash('Maintenance request submitted successfully!', 'success')
         return redirect(url_for('my_reports'))
         
-    if role == 'Professor':
+    if role == 'Staff':
         return render_template('professors/report_issue.html')
     else:
         return render_template('students/report_issue.html')
@@ -229,12 +218,9 @@ def notifications():
     if role == 'Administrator':
         notifs = ServiceRequest.query.order_by(ServiceRequest.created_at.desc()).all()
         return render_template('admin/notifications.html', notifications=notifs)
-    elif role == 'Maintenance Staff':
+    elif role == 'Staff':
         notifs = ServiceRequest.query.filter_by(assigned_to=user_name).order_by(ServiceRequest.created_at.desc()).all()
         return render_template('staff/notifications.html', notifications=notifs)
-    elif role == 'Professor':
-        notifs = ServiceRequest.query.filter_by(user_id=user_id).order_by(ServiceRequest.created_at.desc()).all()
-        return render_template('professors/notifications.html', notifications=notifs)
     else:
         notifs = ServiceRequest.query.filter_by(user_id=user_id).order_by(ServiceRequest.created_at.desc()).all()
         return render_template('students/notifications.html', notifications=notifs)
@@ -248,12 +234,10 @@ def report_details(id):
     role = session.get('role')
     
     if role == 'Administrator':
-        staff_members = User.query.filter_by(role='Maintenance Staff').all()
+        staff_members = User.query.filter_by(role='Staff').all()
         return render_template('admin/report_details.html', report=report, staff_members=staff_members)
-    elif role == 'Maintenance Staff':
+    elif role == 'Staff':
         return render_template('staff/report_details.html', report=report)
-    elif role == 'Professor':
-        return render_template('professors/report_details.html', report=report)
     else:
         return render_template('students/report_details.html', report=report)
 
@@ -265,7 +249,7 @@ def update_request(id):
     report = ServiceRequest.query.get_or_404(id)
     role = session.get('role')
     
-    if role == 'Maintenance Staff':
+    if role == 'Staff':
         report.status = 'Resolved'
         report.resolution_notes = request.form.get('resolution_notes')
     elif role == 'Administrator':
@@ -338,7 +322,7 @@ def add_staff():
         flash('Email already exists.', 'danger')
         return redirect(url_for('dashboard'))
         
-    new_staff = User(name=name, email=email, password=password, role='Maintenance Staff')
+    new_staff = User(name=name, email=email, password=password, role='Staff')
     db.session.add(new_staff)
     db.session.commit()
     flash('Maintenance staff added successfully!', 'success')
